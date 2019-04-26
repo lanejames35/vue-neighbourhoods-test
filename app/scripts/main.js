@@ -8,43 +8,45 @@ Vue.component('l-geo-json', window.Vue2Leaflet.LGeoJson);
 const app = new Vue({
   el: '#app',
   data: {
-    features: [],
+    geojson: [],
     indicators: [],
-    selected: '',
+    selected: null,
     center: [43.9073, -78.9560],
     zoom: 10,
     url: 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
     attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
-    geojson: null,
+    fillColor: '#eceff1',
   },
   computed: {
     // Set style and fill colour methods here
-    fillColor() {
-      return this.features.forEach(function(element){
-        element.properties[this.selected] < 10 ? 'blue' : 'pink';
-      });
-    },
     styleFunction() {
-      const fill = this.fillColor;
       return () => {
-        return {
-          weight: 2,
-          opacity: 1,
-          color: '#eceff1',
-          fillColor: fill,
-          fillOpacity: 1,
-        };
+        console.log('Running styleFunction()');
+        console.log(this.geojson);
+
+          return {
+            weight: 2,
+            opacity: 1,
+            color: '#eceff1',
+            fillColor: function(){
+              this.geojson.features.properties
+            },
+            fillOpacity: 0.5,
+          }; 
+        //})
       };
+    },
+  },
+  watch: {
+    selected(){
+      console.log('Current selection: ' + this.selected);
     },
   },
   created(){
     axios.get('https://opendata.arcgis.com/datasets/29e0d68ac7234bb4b36fa4faf657fa01_29.geojson')
         .then(response => {
-          this.features = response.data.features;
-          // Get keys fro+m the first object
-          // since they're identical
-          this.indicators = Object.keys(response.data.features[0].properties);
           this.geojson = response.data;
+          this.indicators = Object.keys(response.data.features[0].properties);
         })
         .catch(error => {
           console.log(error);
@@ -59,7 +61,7 @@ const app = new Vue({
       </option>
     </select>
     <table>
-      <tr v-for="feature in features">
+      <tr v-for="feature in geojson.features">
         <td>
           {{ feature.properties.COMMON_NAME }}
         </td>
