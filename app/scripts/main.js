@@ -32,6 +32,11 @@ const app = new Vue({
       };
     },
   },
+  methods: {
+    updateSelected(value){
+      return this.selected = value;
+    },
+  },
   created(){
     axios.get('https://opendata.arcgis.com/datasets/29e0d68ac7234bb4b36fa4faf657fa01_29.geojson')
         .then(response => {
@@ -43,36 +48,52 @@ const app = new Vue({
         })
   },
   template: `
-  <div>
-    <select v-model="selected">
-      <option v-for="indicator in indicators"
-              v-bind:value="indicator" >
-        {{ indicator }}
-      </option>
-    </select>
-    <table>
-      <tr v-for="feature in geojson.features">
-        <td>
-          {{ feature.properties.COMMON_NAME }}
-        </td>
-        <td>
-          {{ feature.properties[selected] }}
-        </td>
-      </tr>
-    </table>
-    <l-map
-      :zoom="zoom"
-      :center="center"
-      style="height: 400px" >
-      <l-tile-layer
-        :url="url"
-        :attribution="attribution" >
-      </l-tile-layer>
-      <l-geo-json
-        :geojson="geojson"
-        :options-style="styleFunction" >
-      </l-geo-json>
-    </l-map>
+  <div class="row">
+    <div class="col-sm">
+      <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Choose an indicator
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item"
+            v-for="indicator in indicators"
+            v-on:click="updateSelected(indicator)">
+              {{ indicator }}
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm">
+      <table class="table table-hover">
+        <tr>
+          <th scope="col">Neighbourhood</th>
+          <th scope="col">{{selected}}</th>
+        </tr>
+        <tr v-for="feature in geojson.features">
+          <td>
+            {{ feature.properties.COMMON_NAME }}
+          </td>
+          <td>
+            {{ feature.properties[selected] }}
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="col-sm">
+      <l-map
+        :zoom="zoom"
+        :center="center"
+        style="height: 400px" >
+        <l-tile-layer
+          :url="url"
+          :attribution="attribution" >
+        </l-tile-layer>
+        <l-geo-json
+          :geojson="geojson"
+          :options-style="styleFunction" >
+        </l-geo-json>
+      </l-map>
+    </div>
   </div>
   `,
 });

@@ -3,8 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>vue leaflet bootstrap</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">    <title>vue leaflet bootstrap</title>
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <!-- Place favicon.ico in the root directory -->
     <link rel="stylesheet" href="//unpkg.com/leaflet/dist/leaflet.css">
@@ -18,12 +17,17 @@
     <script src="../node_modules/axios/dist/axios.js"></script>
     <script src="//unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="//unpkg.com/vue2-leaflet"></script>
+    <script src="../node_modules/jquery/dist/jquery.slim.min.js"></script>
+    <script src="../node_modules/popper.js/dist/umd/popper.min.js"></script>
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
   </head>
   <body>
     <!--[if IE]>
       <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
-    <div id="app"></div>
+    <div class="container">
+      <div id="app"></div>
+    </div>
     <!-- build:js scripts/vendor.js -->
     <!-- endbuild -->
     <!-- build:js scripts/main.js -->
