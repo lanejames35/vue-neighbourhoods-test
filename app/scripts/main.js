@@ -12,34 +12,24 @@ const app = new Vue({
     indicators: [],
     selected: null,
     center: [43.9073, -78.9560],
-    zoom: 10,
+    zoom: 8,
     url: 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
     attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
-    fillColor: '#eceff1',
+    fillColor: '#33f4f4',
   },
   computed: {
-    // Set style and fill colour methods here
     styleFunction() {
-      return () => {
-        console.log('Running styleFunction()');
-        console.log(this.geojson);
-
-          return {
-            weight: 2,
-            opacity: 1,
-            color: '#eceff1',
-            fillColor: function(){
-              this.geojson.features.properties
-            },
-            fillOpacity: 0.5,
-          }; 
-        //})
+      const select = this.selected;
+      return (feature) => {
+        const fill = feature.properties[select] < 20 ? 'blue' : 'pink';
+        return {
+          weight: 2,
+          opacity: 1,
+          color: '#eceff1',
+          fillColor: fill,
+          fillOpacity: 0.5,
+        }; 
       };
-    },
-  },
-  watch: {
-    selected(){
-      console.log('Current selection: ' + this.selected);
     },
   },
   created(){
